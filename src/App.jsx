@@ -94,7 +94,7 @@ const App = () => {
   const [newBlock, setNewBlock] = useState({ start: "07:00", end: "08:00", activity: "" });
 
   // --- CRUD STATE TARGET ---
-  const [userHabits, setUserHabits] = useState(["Jogging 🏃‍♀️", "Catat 5 Kosakata 📚", "Screen Time < 4 Jam 📱", "Journaling ✍️", "No Phone 📵"]);
+  const [userHabits, setUserHabits] = useState(["Jogging 🏃‍♀️", "Catat 5 Kosakata 📚", "Screen Time < 4 Jam 📱", "Journaling ✍️", "No Phone Before / After Sleep 📵"]);
   const [userSunnah, setUserSunnah] = useState(['Tahajud', 'Taubat', 'Witir', 'Dhuha', 'Sholawat', 'Ngaji']);
   
   const [isEditHabit, setIsEditHabit] = useState(false);
