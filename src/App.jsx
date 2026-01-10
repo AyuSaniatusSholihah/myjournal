@@ -22,6 +22,24 @@ const getFormattedDate = (date) => {
   return `${y}-${m}-${d}`;
 };
 
+// Persist state to localStorage so data survives refresh
+function usePersistedState(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {}
+  }, [key, value]);
+  return [value, setValue];
+}
+
 const App = () => {
   // --- KONFIGURASI TEMA ---
   const themes = {
@@ -78,24 +96,24 @@ const App = () => {
   const [activeTab, setActiveTab] = useState('calendar');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [eventInput, setEventInput] = useState('');
-  const [theme, setTheme] = useState('midnight'); 
+  const [theme, setTheme] = usePersistedState('theme', 'midnight'); 
   
   const t = themes[theme] || themes.midnight;
   const ThemeIcon = t.Icon;
 
   // --- STATE DATA ---
-  const [events, setEvents] = useState({}); 
-  const [timeBlocks, setTimeBlocks] = useState([]); 
-  const [habitsData, setHabitsData] = useState({}); 
-  const [financeData, setFinanceData] = useState({}); 
+  const [events, setEvents] = usePersistedState('events', {}); 
+  const [timeBlocks, setTimeBlocks] = usePersistedState('timeBlocks', []); 
+  const [habitsData, setHabitsData] = usePersistedState('habitsData', {}); 
+  const [financeData, setFinanceData] = usePersistedState('financeData', {}); 
   const [financeRange, setFinanceRange] = useState('day');
-  const [riyadhohData, setRiyadhohData] = useState({}); 
-  const [journalData, setJournalData] = useState({});
+  const [riyadhohData, setRiyadhohData] = usePersistedState('riyadhohData', {}); 
+  const [journalData, setJournalData] = usePersistedState('journalData', {});
   const [newBlock, setNewBlock] = useState({ start: "07:00", end: "08:00", activity: "" });
 
   // --- CRUD STATE TARGET ---
-  const [userHabits, setUserHabits] = useState(["Jogging 🏃‍♀️", "Catat 5 Kosakata 📚", "Screen Time < 4 Jam 📱", "Journaling ✍️", "No Phone Before / After Sleep 📵"]);
-  const [userSunnah, setUserSunnah] = useState(['Tahajud', 'Taubat', 'Witir', 'Dhuha', 'Sholawat', 'Ngaji']);
+  const [userHabits, setUserHabits] = usePersistedState('userHabits', ["Jogging 🏃‍♀️", "Catat 5 Kosakata 📚", "Screen Time < 4 Jam 📱", "Journaling ✍️", "No Phone Before / After Sleep 📵"]);
+  const [userSunnah, setUserSunnah] = usePersistedState('userSunnah', ['Tahajud', 'Taubat', 'Witir', 'Dhuha', 'Sholawat', 'Ngaji']);
   
   const [isEditHabit, setIsEditHabit] = useState(false);
   const [isEditSunnah, setIsEditSunnah] = useState(false);
